@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="TirAnimalDefinition" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/animal_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/definitions/animal_drop_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/instances/items/raw_meat.tres" id="3"]
+[ext_resource type="Resource" path="res://data/instances/items/deer_hide.tres" id="4"]
+[ext_resource type="Resource" path="res://data/instances/items/deer_sinew.tres" id="5"]
+[ext_resource type="Resource" path="res://data/instances/sounds/deer_sound_profile.tres" id="6"]
+
+[sub_resource type="Resource" id="AnimalDrop_meat"]
+script = ExtResource("2")
+item = ExtResource("3")
+min_amount = 2
+max_amount = 5
+drop_chance = 1.0
+
+[sub_resource type="Resource" id="AnimalDrop_hide"]
+script = ExtResource("2")
+item = ExtResource("4")
+min_amount = 1
+max_amount = 2
+drop_chance = 0.95
+
+[sub_resource type="Resource" id="AnimalDrop_sinew"]
+script = ExtResource("2")
+item = ExtResource("5")
+min_amount = 1
+max_amount = 3
+drop_chance = 0.75
+
+[resource]
+script = ExtResource("1")
+id = &"deer"
+display_name = "Hirsch"
+description = "Scheues Waldtier, das offene Flaechen meidet."
+behavior = 1
+is_predator = false
+is_passive = true
+max_health = 65.0
+move_speed = 8.0
+detection_range = 38.0
+aggression_range = 0.0
+active_day_times = 15
+active_seasons = 15
+drops = Array[Resource]([SubResource("AnimalDrop_meat"), SubResource("AnimalDrop_hide"), SubResource("AnimalDrop_sinew")])
+sound_profile = ExtResource("6")
+otherworld_variant = null
+otherworld_presence_scale = 0.35

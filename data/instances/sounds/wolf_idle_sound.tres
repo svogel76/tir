@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TirSoundDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/sound_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"wolf_idle"
+bus = &"SFX"
+volume_db = -3.0
+pitch_scale = 1.05
+pitch_randomness = 0.1
+is_positional_3d = true
+max_distance = 55.0
+attenuation = 0.95
+fades_near_otherworld = true

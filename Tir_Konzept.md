@@ -565,14 +565,14 @@ Dein Tal, dein Wald, deine Jagdgebiete. Kommt durch Zeit und Aufmerksamkeit.
 
 ```
 Woche 1:  Du hast Feuer. Du hast Obdach. Du hast Fleisch.
-          → Das fühlt sich wie Überleben an.
+		  → Das fühlt sich wie Überleben an.
 
 Woche 3:  Du hast einen Bogen. Du hast Fell. Du hast Wärme.
-          → Das fühlt sich wie Leben an.
+		  → Das fühlt sich wie Leben an.
 
 Woche 6:  Du liest den Wald. Du weißt was kommt.
-          Du hast einen Ort der deiner ist.
-          → Das fühlt sich wie Verwurzelung an.
+		  Du hast einen Ort der deiner ist.
+		  → Das fühlt sich wie Verwurzelung an.
 ```
 
 Kein Moment davon ist selbstverständlich. Jeder ist verdient.

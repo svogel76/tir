@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="TirPlantDefinition" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/plant_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/definitions/plant_harvest_entry.gd" id="2"]
+[ext_resource type="Script" path="res://data/definitions/plant_effect_definition.gd" id="3"]
+[ext_resource type="Script" path="res://data/definitions/plant_synergy_definition.gd" id="4"]
+[ext_resource type="Resource" path="res://data/instances/items/healing_herb.tres" id="5"]
+
+[sub_resource type="Resource" id="PlantHarvestEntry_healing_herb"]
+script = ExtResource("2")
+item = ExtResource("5")
+min_amount = 1
+max_amount = 1
+harvest_chance = 0.6
+
+[sub_resource type="Resource" id="PlantEffect_heal"]
+script = ExtResource("3")
+effect_type = 0
+magnitude = 12.0
+duration_seconds = 8.0
+
+[sub_resource type="Resource" id="PlantEffect_stamina"]
+script = ExtResource("3")
+effect_type = 2
+magnitude = 6.0
+duration_seconds = 25.0
+
+[sub_resource type="Resource" id="PlantEffect_synergy_antidote"]
+script = ExtResource("3")
+effect_type = 0
+magnitude = 8.0
+duration_seconds = 4.0
+
+[sub_resource type="Resource" id="PlantSynergy_with_toxic_mushroom"]
+script = ExtResource("4")
+with_plant_id = &"toxic_mushroom"
+resulting_effects = Array[Resource]([SubResource("PlantEffect_synergy_antidote")])
+
+[resource]
+script = ExtResource("1")
+id = &"healing_herb"
+display_name = "Heilkraut"
+description = "Mildes Kraut, das Wunden schneller schließen kann."
+plant_type = 0
+growing_seasons = 7
+allowed_biome_ids = PackedStringArray("meadow")
+regrow_time_days = 4.0
+harvest = Array[Resource]([SubResource("PlantHarvestEntry_healing_herb")])
+effects = Array[Resource]([SubResource("PlantEffect_heal"), SubResource("PlantEffect_stamina")])
+synergies = Array[Resource]([SubResource("PlantSynergy_with_toxic_mushroom")])

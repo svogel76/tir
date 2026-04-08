@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="TirBiomeDefinition" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/biome_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/definitions/plant_population_entry.gd" id="2"]
+[ext_resource type="Script" path="res://data/definitions/animal_population_entry.gd" id="3"]
+[ext_resource type="Resource" path="res://data/instances/plants/birch.tres" id="4"]
+[ext_resource type="Resource" path="res://data/instances/plants/healing_herb.tres" id="5"]
+[ext_resource type="Resource" path="res://data/instances/animals/deer.tres" id="6"]
+[ext_resource type="Resource" path="res://data/instances/animals/boar.tres" id="7"]
+
+[sub_resource type="Resource" id="PlantPop_birch"]
+script = ExtResource("2")
+plant = ExtResource("4")
+spawn_weight = 0.85
+max_density_per_km2 = 420.0
+
+[sub_resource type="Resource" id="PlantPop_healing_herb"]
+script = ExtResource("2")
+plant = ExtResource("5")
+spawn_weight = 1.2
+max_density_per_km2 = 1200.0
+
+[sub_resource type="Resource" id="AnimalPop_deer"]
+script = ExtResource("3")
+animal = ExtResource("6")
+spawn_weight = 1.0
+max_density_per_km2 = 18.0
+
+[sub_resource type="Resource" id="AnimalPop_boar"]
+script = ExtResource("3")
+animal = ExtResource("7")
+spawn_weight = 0.45
+max_density_per_km2 = 7.0
+
+[resource]
+script = ExtResource("1")
+id = &"meadow"
+display_name = "Wiese"
+description = "Offene Landschaft mit verstreuten Birken und Kraeutern."
+vegetation = Array[Resource]([SubResource("PlantPop_birch"), SubResource("PlantPop_healing_herb")])
+animal_population = Array[Resource]([SubResource("AnimalPop_deer"), SubResource("AnimalPop_boar")])
+ambient_sounds = Array[Resource]([])
+fog_color = Color(0.71, 0.79, 0.72, 1)
+fog_density = 0.12
+otherworld_proximity = 0.15

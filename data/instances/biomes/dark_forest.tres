@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="TirBiomeDefinition" load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/biome_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/definitions/plant_population_entry.gd" id="2"]
+[ext_resource type="Script" path="res://data/definitions/animal_population_entry.gd" id="3"]
+[ext_resource type="Resource" path="res://data/instances/plants/oak.tres" id="4"]
+[ext_resource type="Resource" path="res://data/instances/plants/yew.tres" id="5"]
+[ext_resource type="Resource" path="res://data/instances/plants/toxic_mushroom.tres" id="6"]
+[ext_resource type="Resource" path="res://data/instances/animals/deer.tres" id="7"]
+[ext_resource type="Resource" path="res://data/instances/animals/wolf.tres" id="8"]
+[ext_resource type="Resource" path="res://data/instances/sounds/wolf_idle_sound.tres" id="9"]
+
+[sub_resource type="Resource" id="PlantPop_oak"]
+script = ExtResource("2")
+plant = ExtResource("4")
+spawn_weight = 0.9
+max_density_per_km2 = 260.0
+
+[sub_resource type="Resource" id="PlantPop_yew"]
+script = ExtResource("2")
+plant = ExtResource("5")
+spawn_weight = 0.65
+max_density_per_km2 = 140.0
+
+[sub_resource type="Resource" id="PlantPop_toxic_mushroom"]
+script = ExtResource("2")
+plant = ExtResource("6")
+spawn_weight = 1.1
+max_density_per_km2 = 760.0
+
+[sub_resource type="Resource" id="AnimalPop_deer"]
+script = ExtResource("3")
+animal = ExtResource("7")
+spawn_weight = 0.5
+max_density_per_km2 = 8.0
+
+[sub_resource type="Resource" id="AnimalPop_wolf"]
+script = ExtResource("3")
+animal = ExtResource("8")
+spawn_weight = 0.9
+max_density_per_km2 = 12.0
+
+[resource]
+script = ExtResource("1")
+id = &"dark_forest"
+display_name = "Dunkelwald"
+description = "Dichter Wald mit hohem Nebel und staerkerer Anderswelt-Praesenz."
+vegetation = Array[Resource]([SubResource("PlantPop_oak"), SubResource("PlantPop_yew"), SubResource("PlantPop_toxic_mushroom")])
+animal_population = Array[Resource]([SubResource("AnimalPop_deer"), SubResource("AnimalPop_wolf")])
+ambient_sounds = Array[Resource]([ExtResource("9")])
+fog_color = Color(0.24, 0.3, 0.27, 1)
+fog_density = 0.48
+otherworld_proximity = 0.72

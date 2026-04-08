@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="TirPlantDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/plant_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/definitions/plant_harvest_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/instances/items/oak_wood.tres" id="3"]
+
+[sub_resource type="Resource" id="PlantHarvestEntry_yew_wood"]
+script = ExtResource("2")
+item = ExtResource("3")
+min_amount = 1
+max_amount = 2
+harvest_chance = 0.85
+
+[resource]
+script = ExtResource("1")
+id = &"yew"
+display_name = "Eibe"
+description = "Dunkler Nadelbaum, in der Folklore oft mit dem Jenseits verbunden."
+plant_type = 3
+growing_seasons = 11
+allowed_biome_ids = PackedStringArray("dark_forest")
+regrow_time_days = 18.0
+harvest = Array[Resource]([SubResource("PlantHarvestEntry_yew_wood")])
+effects = Array[Resource]([])
+synergies = Array[Resource]([])

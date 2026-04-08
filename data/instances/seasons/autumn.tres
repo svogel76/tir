@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TirSeasonDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/season_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"autumn"
+display_name = "Herbst"
+description = "Kuerzere Tage, feucht-kuehle Luft und fallendes Laub."
+daylight_hours = 10.8
+temperature_min_c = 3.0
+temperature_max_c = 13.0
+light_tint = Color(0.95, 0.84, 0.72, 1)
+precipitation_type = 3
+precipitation_intensity = 0.52
+atmosphere_density = 0.42
+celtic_festivals = PackedStringArray("Samhain")
+otherworld_strength = 0.72

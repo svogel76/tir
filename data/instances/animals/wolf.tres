@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="TirAnimalDefinition" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/animal_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/definitions/animal_drop_entry.gd" id="2"]
+[ext_resource type="Resource" path="res://data/instances/items/raw_meat.tres" id="3"]
+[ext_resource type="Resource" path="res://data/instances/items/deer_sinew.tres" id="4"]
+[ext_resource type="Resource" path="res://data/instances/sounds/wolf_sound_profile.tres" id="5"]
+
+[sub_resource type="Resource" id="AnimalDrop_meat"]
+script = ExtResource("2")
+item = ExtResource("3")
+min_amount = 2
+max_amount = 4
+drop_chance = 1.0
+
+[sub_resource type="Resource" id="AnimalDrop_sinew"]
+script = ExtResource("2")
+item = ExtResource("4")
+min_amount = 1
+max_amount = 2
+drop_chance = 0.65
+
+[resource]
+script = ExtResource("1")
+id = &"wolf"
+display_name = "Wolf"
+description = "Raeuberisches Rudeltier, gefaehrlich in dunklen Regionen."
+behavior = 2
+is_predator = true
+is_passive = false
+max_health = 75.0
+move_speed = 9.5
+detection_range = 42.0
+aggression_range = 18.0
+active_day_times = 12
+active_seasons = 15
+drops = Array[Resource]([SubResource("AnimalDrop_meat"), SubResource("AnimalDrop_sinew")])
+sound_profile = ExtResource("5")
+otherworld_variant = null
+otherworld_presence_scale = 0.7

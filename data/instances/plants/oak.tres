@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="TirPlantDefinition" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/plant_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/definitions/plant_harvest_entry.gd" id="2"]
+[ext_resource type="Script" path="res://data/definitions/plant_effect_definition.gd" id="3"]
+[ext_resource type="Resource" path="res://data/instances/items/oak_wood.tres" id="4"]
+
+[sub_resource type="Resource" id="PlantHarvestEntry_oak_wood"]
+script = ExtResource("2")
+item = ExtResource("4")
+min_amount = 2
+max_amount = 4
+harvest_chance = 1.0
+
+[sub_resource type="Resource" id="PlantEffect_warmth_resin"]
+script = ExtResource("3")
+effect_type = 3
+magnitude = 2.0
+duration_seconds = 120.0
+
+[resource]
+script = ExtResource("1")
+id = &"oak"
+display_name = "Eiche"
+description = "Alter Baum mit hartem Holz und tiefer Verwurzelung."
+plant_type = 3
+growing_seasons = 15
+allowed_biome_ids = PackedStringArray("meadow", "dark_forest")
+regrow_time_days = 14.0
+harvest = Array[Resource]([SubResource("PlantHarvestEntry_oak_wood")])
+effects = Array[Resource]([SubResource("PlantEffect_warmth_resin")])
+synergies = Array[Resource]([])

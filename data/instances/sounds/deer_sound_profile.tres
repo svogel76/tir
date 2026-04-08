@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TirSoundProfileDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/sound_profile_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/instances/sounds/deer_idle_sound.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+idle_sounds = Array[Resource]([ExtResource("2")])
+alert_sounds = Array[Resource]([])
+flee_sounds = Array[Resource]([])
+death_sounds = Array[Resource]([])
