@@ -63,6 +63,12 @@ func has_command(command_name: String) -> bool:
 	return _commands.has(command_name.strip_edges().to_lower())
 
 
+func unregister_command(command_name: String) -> void:
+	var key: String = command_name.strip_edges().to_lower()
+	if _commands.has(key):
+		_commands.erase(key)
+
+
 func execute_command_line(command_line: String) -> String:
 	var line: String = command_line.strip_edges()
 	if line.is_empty():
@@ -177,12 +183,21 @@ func _update_overlay_text() -> void:
 		position_text = "(%d, %d, %d)" % [roundi(p.x), roundi(p.y), roundi(p.z)]
 		state_text = _resolve_player_state_text(player)
 
-	var text := "DEBUG MODE\nFPS: %d\nPos: %s\nState: %s\nTime: %.2f\nSeason: %d" % [
+	var readable_time: String = "%.2f" % debug_time_of_day
+	var season_value: int = debug_season
+	var day_night: Node = _get_day_night_node()
+	if day_night != null:
+		if day_night.has_method("get_time_string"):
+			readable_time = String(day_night.call("get_time_string"))
+		if day_night.has_method("get_current_season"):
+			season_value = int(day_night.call("get_current_season"))
+
+	var text := "DEBUG MODE\nFPS: %d\nPos: %s\nState: %s\nTime: %s\nSeason: %d" % [
 		fps,
 		position_text,
 		state_text,
-		debug_time_of_day,
-		debug_season
+		readable_time,
+		season_value
 	]
 	_overlay.call("set_overlay_text", text)
 
@@ -208,6 +223,17 @@ func _get_player_node() -> Node3D:
 	if players.is_empty():
 		return null
 	return players[0] as Node3D
+
+
+func _get_day_night_node() -> Node:
+	if not is_inside_tree():
+		return null
+	if get_tree() == null:
+		return null
+	var nodes: Array[Node] = get_tree().get_nodes_in_group("day_night_cycle")
+	if nodes.is_empty():
+		return null
+	return nodes[0]
 
 
 func _set_player_input_paused(paused: bool) -> void:
@@ -300,6 +326,10 @@ func _cmd_timescale(args: PackedStringArray) -> String:
 	if not parse.get("ok", false):
 		return parse.get("error", "Fehler")
 	var value: float = max(0.01, float(parse.get("value", 1.0)))
+	var day_night: Node = _get_day_night_node()
+	if day_night != null and day_night.has_method("set_day_speed_scale"):
+		day_night.call("set_day_speed_scale", value)
+		return "Tagesgeschwindigkeit = %.3f" % value
 	Engine.time_scale = value
 	return "Engine.time_scale = %.3f" % value
 
@@ -310,7 +340,14 @@ func _cmd_time(args: PackedStringArray) -> String:
 	var parse: Dictionary = _parse_float_arg(args, 0, "N")
 	if not parse.get("ok", false):
 		return parse.get("error", "Fehler")
-	set_time_of_day(float(parse.get("value", 0.5)))
+	var value: float = float(parse.get("value", 0.5))
+	var day_night: Node = _get_day_night_node()
+	if day_night != null and day_night.has_method("set_time_of_day"):
+		day_night.call("set_time_of_day", value)
+		if day_night.has_method("get_time_string"):
+			return "Tageszeit gesetzt: %s (%.2f)" % [String(day_night.call("get_time_string")), value]
+		return "Tageszeit gesetzt auf %.2f" % value
+	set_time_of_day(value)
 	return "Tageszeit gesetzt auf %.2f" % debug_time_of_day
 
 

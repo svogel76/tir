@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/systems/day_night_cycle.gd" id="1"]
+
+[node name="DayNightCycle" type="Node"]
+script = ExtResource("1")
+time_of_day = 0.25
+day_speed_scale = 1.0
+day_length_seconds = 900.0
+current_season = 0
