@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="PackedScene" path="res://src/player/player.tscn" id="1"]
 [ext_resource type="Script" path="res://src/world/terrain_generator.gd" id="2"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://src/debug/debug_overlay.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://src/debug/debug_console.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://src/systems/day_night_cycle.tscn" id="6"]
+[ext_resource type="Script" path="res://src/systems/auto_ambient_player.gd" id="7"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 shader = ExtResource("3")
@@ -100,3 +101,6 @@ position = Vector3(0, 32, 0)
 sun_light_path = NodePath("../Sun")
 world_environment_path = NodePath("../WorldEnvironment")
 terrain_path = NodePath("../Terrain")
+
+[node name="AutoAmbientPlayer" type="Node" parent="."]
+script = ExtResource("7")

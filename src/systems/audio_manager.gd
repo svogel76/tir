@@ -3,7 +3,8 @@ extends Node
 const MAX_FADE_DB: float = -60.0
 
 @export_range(0.1, 30.0, 0.1) var volume_lerp_speed: float = 8.0
-@export var ambient_default_bus: StringName = &"Master"
+@export_range(0.0, 0.25, 0.001) var time_crossfade_width: float = 0.10
+@export var ambient_default_bus: StringName = &"Ambient"
 @export var position_default_bus: StringName = &"Master"
 
 var otherworld_fade: float = 0.0
@@ -30,8 +31,6 @@ func _process(delta: float) -> void:
 func play_ambient(sound_definition: TirSoundDefinition) -> AudioStreamPlayer:
 	if sound_definition == null:
 		return null
-	if not _is_sound_active(sound_definition):
-		return null
 
 	var key: String = String(sound_definition.id)
 	if key.is_empty():
@@ -46,7 +45,10 @@ func play_ambient(sound_definition: TirSoundDefinition) -> AudioStreamPlayer:
 
 	_apply_sound_to_player(player, sound_definition, false)
 	player.autoplay = false
-	player.play()
+	if not player.finished.is_connected(_on_ambient_finished.bind(key)):
+		player.finished.connect(_on_ambient_finished.bind(key))
+	if not player.playing:
+		player.play()
 	_sound_by_player_id[player.get_instance_id()] = sound_definition
 	return player
 
@@ -134,8 +136,12 @@ func _update_player_volume(player: Node, delta: float) -> void:
 func _calculate_fade_db(sound_definition: TirSoundDefinition) -> float:
 	if muted:
 		return MAX_FADE_DB
-	if sound_definition != null and not _is_sound_active(sound_definition):
+	if sound_definition != null and not _is_sound_season_active(sound_definition):
 		return MAX_FADE_DB
+
+	var activity_weight: float = 1.0
+	if sound_definition != null:
+		activity_weight = _get_time_activity_weight(sound_definition)
 
 	var fade_factor: float = otherworld_fade
 	if sound_definition != null:
@@ -144,22 +150,47 @@ func _calculate_fade_db(sound_definition: TirSoundDefinition) -> float:
 		fade_factor *= layer_factor
 		if not sound_definition.fades_near_otherworld:
 			fade_factor *= 0.5
-	return lerpf(0.0, MAX_FADE_DB, clampf(fade_factor, 0.0, 1.0))
+
+	var otherworld_db: float = lerpf(0.0, MAX_FADE_DB, clampf(fade_factor, 0.0, 1.0))
+	var schedule_db: float = lerpf(MAX_FADE_DB, 0.0, activity_weight)
+	return otherworld_db + schedule_db
 
 
-func _is_sound_active(sound_definition: TirSoundDefinition) -> bool:
+func _is_sound_season_active(sound_definition: TirSoundDefinition) -> bool:
 	if sound_definition == null:
 		return false
 	if sound_definition.active_seasons.size() > 0 and not sound_definition.active_seasons.has(season):
 		return false
+	return true
 
+
+func _is_sound_active(sound_definition: TirSoundDefinition) -> bool:
+	return _is_sound_season_active(sound_definition) and _get_time_activity_weight(sound_definition) > 0.0
+
+
+func _get_time_activity_weight(sound_definition: TirSoundDefinition) -> float:
+	if sound_definition == null:
+		return 0.0
 	var start: float = sound_definition.active_time_start
 	var ending: float = sound_definition.active_time_end
 	if is_equal_approx(start, ending):
-		return true
+		return 1.0
+	var t: float = time_of_day
+	var width: float = clampf(time_crossfade_width, 0.0, 0.25)
 	if start < ending:
-		return time_of_day >= start and time_of_day <= ending
-	return time_of_day >= start or time_of_day <= ending
+		var in_weight: float = 1.0 if width <= 0.0 else smoothstep(start - width, start + width, t)
+		var out_weight: float = 1.0 if width <= 0.0 else (1.0 - smoothstep(ending - width, ending + width, t))
+		return clampf(in_weight * out_weight, 0.0, 1.0)
+	return maxf(
+		_get_wrapped_segment_weight(t, start, 1.0, width),
+		_get_wrapped_segment_weight(t, 0.0, ending, width)
+	)
+
+
+func _get_wrapped_segment_weight(t: float, start: float, ending: float, width: float) -> float:
+	var in_weight: float = 1.0 if width <= 0.0 else smoothstep(start - width, start + width, t)
+	var out_weight: float = 1.0 if width <= 0.0 else (1.0 - smoothstep(ending - width, ending + width, t))
+	return clampf(in_weight * out_weight, 0.0, 1.0)
 
 
 func _apply_sound_to_player(player: Node, sound_definition: TirSoundDefinition, positional: bool) -> void:
@@ -231,3 +262,12 @@ func _cmd_audio_fade(args: PackedStringArray) -> String:
 func _cmd_audio_mute(_args: PackedStringArray) -> String:
 	muted = not muted
 	return "Audio %s" % ("stumm" if muted else "aktiv")
+
+
+func _on_ambient_finished(key: String) -> void:
+	var player: AudioStreamPlayer = _ambient_players.get(key, null) as AudioStreamPlayer
+	if player == null:
+		return
+	if player.stream == null:
+		return
+	player.play()

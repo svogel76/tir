@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TirSoundDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://data/definitions/sound_definition.gd" id="1"]
+[ext_resource type="AudioStreamOggVorbis" path="res://assets/audio/ambient/night_insects.ogg" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"ambient_night_insects"
+stream = ExtResource("2")
+bus = &"Ambient"
+volume_db = -12.0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+is_positional_3d = false
+fades_near_otherworld = true
+otherworld_layer = 3
+active_seasons = PackedInt32Array(0, 1, 2, 3)
+active_time_start = 0.75
+active_time_end = 0.25
