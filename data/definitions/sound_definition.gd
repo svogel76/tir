@@ -14,3 +14,7 @@ class_name TirSoundDefinition
 @export_range(0.0, 10.0, 0.01) var attenuation: float = 1.0
 
 @export var fades_near_otherworld: bool = false
+@export_range(0, 3, 1) var otherworld_layer: int = 0
+@export var active_seasons: PackedInt32Array = PackedInt32Array([0, 1, 2, 3])
+@export_range(0.0, 1.0, 0.001) var active_time_start: float = 0.0
+@export_range(0.0, 1.0, 0.001) var active_time_end: float = 1.0

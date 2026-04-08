@@ -58,11 +58,13 @@ func _process(delta: float) -> void:
 	var effective_day_length: float = max(10.0, day_length_seconds / max(season_multiplier, 0.01))
 	var cycle_speed: float = (day_speed_scale / effective_day_length) * delta
 	time_of_day = wrapf(time_of_day + cycle_speed, 0.0, 1.0)
+	_sync_audio_state()
 	_apply_lighting()
 
 
 func set_time_of_day(value: float) -> void:
 	time_of_day = clampf(value, 0.0, 1.0)
+	_sync_audio_state()
 	_apply_lighting()
 
 
@@ -119,6 +121,16 @@ func _cmd_timescale(args: PackedStringArray) -> String:
 func _apply_lighting() -> void:
 	_apply_sun()
 	_apply_environment()
+
+
+func _sync_audio_state() -> void:
+	if not has_node("/root/AudioManager"):
+		return
+	var audio_manager: Node = get_node("/root/AudioManager")
+	if audio_manager.has_method("set_time_of_day"):
+		audio_manager.call("set_time_of_day", time_of_day)
+	if audio_manager.has_method("set_season"):
+		audio_manager.call("set_season", current_season)
 
 
 func _resolve_scene_references() -> void:

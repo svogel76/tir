@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameRegistry="*res://src/systems/registry/game_registry.gd"
 DebugManager="*res://src/debug/debug_manager.gd"
+AudioManager="*res://src/systems/audio_manager.gd"
 
 [editor_plugins]
 
