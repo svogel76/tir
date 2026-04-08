@@ -5,7 +5,7 @@ extends Node
 @export_range(30.0, 3600.0, 1.0, "suffix:s") var day_length_seconds: float = 900.0
 @export_range(0, 3, 1) var current_season: int = 0
 @export_range(-180.0, 180.0, 0.1) var sun_azimuth_degrees: float = -38.0
-@export_range(-180.0, 180.0, 0.1) var sun_elevation_offset_degrees: float = -110.0
+@export_range(-180.0, 180.0, 0.1) var sun_elevation_offset_degrees: float = 0.0
 
 @export_node_path("DirectionalLight3D") var sun_light_path: NodePath
 @export_node_path("WorldEnvironment") var world_environment_path: NodePath
@@ -167,8 +167,15 @@ func _apply_sun() -> void:
 		_circular_peak(t, 0.75, 0.10)
 	)
 
-	sun_light.rotation_degrees.x = sun_elevation_offset_degrees + t * 360.0
-	sun_light.rotation_degrees.y = sun_azimuth_degrees
+	# Sun path (world): matches daylight phase sin((t - 0.25) * TAU) — noon ~70° elevation,
+	# sunrise/sunset on horizon, midnight underground. DirectionalLight shines along -basis.z = L.
+	var phase: float = (t - 0.25) * TAU
+	var elev_rad: float = deg_to_rad(70.0 + sun_elevation_offset_degrees) * sin(phase)
+	var azim_rad: float = phase + deg_to_rad(sun_azimuth_degrees)
+	var ce: float = cos(elev_rad)
+	var dir_to_sun: Vector3 = Vector3(ce * cos(azim_rad), sin(elev_rad), ce * sin(azim_rad)).normalized()
+	var light_travel: Vector3 = -dir_to_sun
+	sun_light.global_basis = _basis_light_direction(light_travel)
 	sun_light.light_energy = lerpf(sun_night_energy, sun_day_energy, daylight)
 	var color: Color = night_sun_color.lerp(noon_sun_color, daylight)
 	color = color.lerp(dawn_dusk_sun_color, dawn_dusk)
@@ -225,9 +232,19 @@ func _apply_shader_day_night(daylight: float) -> void:
 	shader_mat.set_shader_parameter("moonlight_strength", moon_strength)
 	shader_mat.set_shader_parameter("moonlight_color", moonlight_color)
 	shader_mat.set_shader_parameter("moonlight_direction", moonlight_direction.normalized())
+	TirProceduralTree.sync_moonlight(moon_strength, moonlight_color, moonlight_direction)
 
 
 func _circular_peak(t: float, center: float, width: float) -> float:
 	var d: float = absf(t - center)
 	d = minf(d, 1.0 - d)
 	return clampf(1.0 - d / maxf(width, 0.0001), 0.0, 1.0)
+
+
+func _basis_light_direction(light_travel: Vector3) -> Basis:
+	var d: Vector3 = light_travel.normalized()
+	var up: Vector3 = Vector3.UP
+	if absf(d.dot(up)) > 0.998:
+		up = Vector3.RIGHT
+	var b: Basis = Basis.looking_at(d, up)
+	return b.orthonormalized()

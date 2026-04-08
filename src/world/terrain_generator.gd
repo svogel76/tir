@@ -58,3 +58,17 @@ func _sample_height(wx: float, wz: float) -> float:
 	var base_h: float = softened_base * base_amplitude
 	var detail_h: float = detail_n * detail_amplitude
 	return plateau_height + base_h + detail_h
+
+
+func sample_height_at_world(world_x: float, world_z: float) -> float:
+	return _sample_height(world_x, world_z)
+
+
+func sample_surface_normal_at_world(world_x: float, world_z: float, sample_step: float = 1.0) -> Vector3:
+	var h_l: float = _sample_height(world_x - sample_step, world_z)
+	var h_r: float = _sample_height(world_x + sample_step, world_z)
+	var h_d: float = _sample_height(world_x, world_z - sample_step)
+	var h_u: float = _sample_height(world_x, world_z + sample_step)
+	var dhdx: float = (h_r - h_l) / (2.0 * sample_step)
+	var dhdz: float = (h_u - h_d) / (2.0 * sample_step)
+	return Vector3(-dhdx, 1.0, -dhdz).normalized()

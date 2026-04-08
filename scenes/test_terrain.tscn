@@ -1,55 +1,19 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene format=3 uid="uid://d3w4qohq3g1kp"]
 
 [ext_resource type="PackedScene" path="res://src/player/player.tscn" id="1"]
-[ext_resource type="Script" path="res://src/world/terrain_generator.gd" id="2"]
-[ext_resource type="Shader" path="res://assets/shaders/terrain_cel.gdshader" id="3"]
+[ext_resource type="Script" uid="uid://dtsgrd03jlbjj" path="res://src/world/terrain_generator.gd" id="2"]
+[ext_resource type="Shader" uid="uid://ci4btm2wn6wm2" path="res://assets/shaders/terrain_cel.gdshader" id="3"]
 [ext_resource type="PackedScene" path="res://src/debug/debug_overlay.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://src/debug/debug_console.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://src/systems/day_night_cycle.tscn" id="6"]
-[ext_resource type="Script" path="res://src/systems/auto_ambient_player.gd" id="7"]
-
-[sub_resource type="ShaderMaterial" id="1"]
-shader = ExtResource("3")
-shader_parameter/grass_flat_color = Color(0.29, 0.48, 0.18, 1)
-shader_parameter/earth_mid_color = Color(0.41, 0.33, 0.24, 1)
-shader_parameter/rock_steep_color = Color(0.4, 0.36, 0.32, 1)
-shader_parameter/lit_tint = Color(0.98, 0.95, 0.86, 1)
-shader_parameter/halfshadow_tint = Color(0.72, 0.8, 0.7, 1)
-shader_parameter/shadow_tint = Color(0.28, 0.38, 0.31, 1)
-shader_parameter/rim_color = Color(0.9, 0.95, 0.9, 1)
-shader_parameter/grass_max_angle_deg = 28.0
-shader_parameter/rock_min_angle_deg = 54.0
-shader_parameter/slope_blend_softness_deg = 6.0
-shader_parameter/shadow_strength = 0.46
-shader_parameter/halfshadow_strength = 0.70
-shader_parameter/band_softness = 0.02
-shader_parameter/band_1_threshold = 0.33
-shader_parameter/band_2_threshold = 0.66
-shader_parameter/relief_strength = 0.34
-shader_parameter/rim_strength = 0.07
-shader_parameter/rim_power = 3.2
-shader_parameter/moonlight_color = Color(0.58, 0.67, 0.82, 1)
-shader_parameter/moonlight_strength = 0.0
-shader_parameter/moonlight_direction = Vector3(-0.4, 0.85, 0.35)
-shader_parameter/moonlight_wrap = 0.22
-
-[sub_resource type="VoxelMesherTransvoxel" id="2"]
-Materials = Array[Material]([SubResource("1")])
-
-[sub_resource type="VoxelGeneratorScript" id="3"]
-script = ExtResource("2")
-noise_seed = 1337
-base_frequency = 0.012
-detail_frequency = 0.04
-base_amplitude = 6.5
-detail_amplitude = 1.4
-plateau_height = 20.0
+[ext_resource type="Script" uid="uid://fpqoixklmb3h" path="res://src/systems/auto_ambient_player.gd" id="7"]
+[ext_resource type="Script" uid="uid://ct56ia44xaawv" path="res://src/world/tree_placer.gd" id="8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="4"]
 sky_top_color = Color(0.32, 0.66, 0.72, 1)
 sky_horizon_color = Color(0.67, 0.86, 0.8, 1)
-ground_horizon_color = Color(0.47, 0.52, 0.46, 1)
 ground_bottom_color = Color(0.24, 0.28, 0.24, 1)
+ground_horizon_color = Color(0.47, 0.52, 0.46, 1)
 
 [sub_resource type="Sky" id="5"]
 sky_material = SubResource("4")
@@ -63,44 +27,94 @@ fog_enabled = true
 fog_light_color = Color(0.68, 0.83, 0.78, 1)
 fog_density = 0.0022
 fog_aerial_perspective = 0.08
-tonemap_mode = 0
 
-[node name="TestTerrain" type="Node3D"]
+[sub_resource type="VoxelGeneratorScript" id="3"]
+script = ExtResource("2")
+base_frequency = 0.012
+detail_frequency = 0.04
+base_amplitude = 6.5
+detail_amplitude = 1.4
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[sub_resource type="VoxelMesherTransvoxel" id="2"]
+
+[sub_resource type="ShaderMaterial" id="1"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/grass_flat_color = Color(0.29, 0.48, 0.18, 1)
+shader_parameter/earth_mid_color = Color(0.41, 0.33, 0.24, 1)
+shader_parameter/rock_steep_color = Color(0.4, 0.36, 0.32, 1)
+shader_parameter/lit_tint = Color(0.98, 0.95, 0.86, 1)
+shader_parameter/halfshadow_tint = Color(0.72, 0.8, 0.7, 1)
+shader_parameter/shadow_tint = Color(0.28, 0.38, 0.31, 1)
+shader_parameter/rim_color = Color(0.9, 0.95, 0.9, 1)
+shader_parameter/grass_max_angle_deg = 28.0
+shader_parameter/rock_min_angle_deg = 54.0
+shader_parameter/slope_blend_softness_deg = 6.0
+shader_parameter/shadow_strength = 0.46
+shader_parameter/halfshadow_strength = 0.7
+shader_parameter/band_softness = 0.02
+shader_parameter/band_1_threshold = 0.33
+shader_parameter/band_2_threshold = 0.66
+shader_parameter/relief_strength = 0.34
+shader_parameter/rim_strength = 0.07
+shader_parameter/rim_power = 3.2
+shader_parameter/moonlight_color = Color(0.58, 0.67, 0.82, 1)
+shader_parameter/moonlight_strength = 0.0
+shader_parameter/moonlight_direction = Vector3(-0.4, 0.85, 0.35)
+shader_parameter/moonlight_wrap = 0.22
+
+[node name="TestTerrain" type="Node3D" unique_id=379910487]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=164568380]
 environment = SubResource("6")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
-rotation = Vector3(-0.72, -0.98, 0.0)
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1412907451]
+transform = Transform3D(0.5570225, 0.54761726, -0.62437266, 0, 0.7518057, 0.65938467, 0.8304974, -0.3672921, 0.4187727, 0, 0, 0)
 light_color = Color(1, 0.91, 0.76, 1)
 light_energy = 1.05
 shadow_enabled = true
-directional_shadow_mode = 2
-directional_shadow_max_distance = 380.0
 directional_shadow_split_1 = 0.06
-directional_shadow_split_2 = 0.2
-directional_shadow_split_3 = 0.5
+directional_shadow_max_distance = 380.0
 
-[node name="Terrain" type="VoxelLodTerrain" parent="."]
-view_distance = 256.0
-lod_count = 5
-mesh_block_size = 16
-collision_enabled = true
+[node name="Terrain" type="VoxelLodTerrain" parent="." unique_id=762330539]
 generator = SubResource("3")
 mesher = SubResource("2")
+view_distance = 256
+lod_count = 5
 material = SubResource("1")
+run_stream_in_editor = false
 
-[node name="Player" parent="." instance=ExtResource("1")]
-position = Vector3(0, 32, 0)
+[node name="TreePlacer" type="Node3D" parent="." unique_id=479818744]
+script = ExtResource("8")
+terrain_path = NodePath("../Terrain")
 
-[node name="DebugOverlay" parent="." instance=ExtResource("4")]
+[node name="Player" parent="." unique_id=1991583728 instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
 
-[node name="DebugConsole" parent="." instance=ExtResource("5")]
+[node name="DebugOverlay" parent="." unique_id=2095914375 instance=ExtResource("4")]
 
-[node name="DayNightCycle" parent="." instance=ExtResource("6")]
+[node name="DebugConsole" parent="." unique_id=55336668 instance=ExtResource("5")]
+
+[node name="DayNightCycle" parent="." unique_id=1282653386 instance=ExtResource("6")]
 sun_light_path = NodePath("../Sun")
 world_environment_path = NodePath("../WorldEnvironment")
 terrain_path = NodePath("../Terrain")
+night_sun_color = Color(0.101960786, 0.14117648, 0.3372549, 1)
+dawn_dusk_sun_color = Color(1, 0.54901963, 0.14901961, 1)
+noon_sun_color = Color(1, 0.9607843, 0.8784314, 1)
+sky_night_top = Color(0.02745098, 0.050980393, 0.12156863, 1)
+sky_night_horizon = Color(0.05882353, 0.101960786, 0.2, 1)
+sky_dawn_top = Color(0.4, 0.2, 0.3529412, 1)
+sky_dawn_horizon = Color(0.9490196, 0.34901962, 0.101960786, 1)
+sky_day_top = Color(0.18039216, 0.56078434, 0.6392157, 1)
+sky_day_horizon = Color(0.49019608, 0.8117647, 0.7137255, 1)
+ground_day_horizon = Color(0.2901961, 0.47843137, 0.23921569, 1)
+ground_day_bottom = Color(0.1764706, 0.32941177, 0.14901961, 1)
+ambient_day_energy = 0.15
+ambient_night_energy = 0.001
+sun_day_energy = 1.6
+horizon_haze_day = 0.18
+horizon_haze_night = 0.04
 
-[node name="AutoAmbientPlayer" type="Node" parent="."]
+[node name="AutoAmbientPlayer" type="Node" parent="." unique_id=1381962252]
 script = ExtResource("7")
