@@ -1,0 +1,135 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://src/player/player.tscn" id="1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="10"]
+sky_top_color = Color(0.2, 0.35, 0.62, 1)
+sky_horizon_color = Color(0.77, 0.82, 0.9, 1)
+ground_horizon_color = Color(0.35, 0.31, 0.28, 1)
+ground_bottom_color = Color(0.15, 0.14, 0.13, 1)
+
+[sub_resource type="Sky" id="11"]
+sky_material = SubResource("10")
+
+[sub_resource type="Environment" id="12"]
+background_mode = 2
+sky = SubResource("11")
+ambient_light_source = 3
+ambient_light_energy = 0.55
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="13"]
+size = Vector3(120, 1, 120)
+
+[sub_resource type="BoxMesh" id="14"]
+size = Vector3(120, 1, 120)
+
+[sub_resource type="BoxShape3D" id="15"]
+size = Vector3(2.2, 0.3, 2.2)
+
+[sub_resource type="BoxMesh" id="16"]
+size = Vector3(2.2, 0.3, 2.2)
+
+[sub_resource type="BoxShape3D" id="17"]
+size = Vector3(5, 0.5, 8)
+
+[sub_resource type="BoxMesh" id="18"]
+size = Vector3(5, 0.5, 8)
+
+[sub_resource type="BoxShape3D" id="19"]
+size = Vector3(3, 2.4, 3)
+
+[sub_resource type="BoxMesh" id="20"]
+size = Vector3(3, 2.4, 3)
+
+[sub_resource type="BoxShape3D" id="21"]
+size = Vector3(2.4, 0.6, 2.4)
+
+[sub_resource type="BoxMesh" id="22"]
+size = Vector3(2.4, 0.6, 2.4)
+
+[node name="TestPlayerScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("12")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.9, -0.5, 0.0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("13")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("14")
+
+[node name="StairStep01" type="StaticBody3D" parent="."]
+position = Vector3(-6, 0.15, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StairStep01"]
+shape = SubResource("15")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StairStep01"]
+mesh = SubResource("16")
+
+[node name="StairStep02" type="StaticBody3D" parent="."]
+position = Vector3(-3.5, 0.3, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StairStep02"]
+shape = SubResource("15")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StairStep02"]
+mesh = SubResource("16")
+
+[node name="StairStep03" type="StaticBody3D" parent="."]
+position = Vector3(-1.0, 0.45, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StairStep03"]
+shape = SubResource("15")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StairStep03"]
+mesh = SubResource("16")
+
+[node name="StairStep04" type="StaticBody3D" parent="."]
+position = Vector3(1.8, 0.6, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StairStep04"]
+shape = SubResource("15")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StairStep04"]
+mesh = SubResource("16")
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+position = Vector3(8.5, 0.25, -9.5)
+rotation = Vector3(0.261799, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("17")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp"]
+mesh = SubResource("18")
+
+[node name="LandingPlatform" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.2, -20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LandingPlatform"]
+shape = SubResource("19")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LandingPlatform"]
+mesh = SubResource("20")
+
+[node name="JumpOnlyPlatform" type="StaticBody3D" parent="."]
+position = Vector3(5.0, 0.6, -20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JumpOnlyPlatform"]
+shape = SubResource("21")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="JumpOnlyPlatform"]
+mesh = SubResource("22")
+
+[node name="Player" parent="." instance=ExtResource("1")]
+position = Vector3(0, 1.1, 10.0)
