@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://src/player/player.tscn" id="1"]
+[ext_resource type="Script" path="res://src/world/terrain_generator.gd" id="2"]
+[ext_resource type="Shader" path="res://assets/shaders/terrain_cel.gdshader" id="3"]
+
+[sub_resource type="ShaderMaterial" id="1"]
+shader = ExtResource("3")
+shader_parameter/grass_flat_color = Color(0.29, 0.48, 0.18, 1)
+shader_parameter/earth_mid_color = Color(0.41, 0.33, 0.24, 1)
+shader_parameter/rock_steep_color = Color(0.4, 0.36, 0.32, 1)
+shader_parameter/lit_tint = Color(0.98, 0.95, 0.86, 1)
+shader_parameter/halfshadow_tint = Color(0.72, 0.8, 0.7, 1)
+shader_parameter/shadow_tint = Color(0.28, 0.38, 0.31, 1)
+shader_parameter/rim_color = Color(0.9, 0.95, 0.9, 1)
+shader_parameter/grass_max_angle_deg = 28.0
+shader_parameter/rock_min_angle_deg = 54.0
+shader_parameter/slope_blend_softness_deg = 6.0
+shader_parameter/shadow_strength = 0.62
+shader_parameter/halfshadow_strength = 0.82
+shader_parameter/band_softness = 0.05
+shader_parameter/rim_strength = 0.07
+shader_parameter/rim_power = 3.2
+
+[sub_resource type="VoxelMesherTransvoxel" id="2"]
+Materials = Array[Material]([SubResource("1")])
+
+[sub_resource type="VoxelGeneratorScript" id="3"]
+script = ExtResource("2")
+noise_seed = 1337
+base_frequency = 0.012
+detail_frequency = 0.04
+base_amplitude = 6.5
+detail_amplitude = 1.4
+plateau_height = 20.0
+
+[sub_resource type="ProceduralSkyMaterial" id="4"]
+sky_top_color = Color(0.32, 0.66, 0.72, 1)
+sky_horizon_color = Color(0.67, 0.86, 0.8, 1)
+ground_horizon_color = Color(0.47, 0.52, 0.46, 1)
+ground_bottom_color = Color(0.24, 0.28, 0.24, 1)
+
+[sub_resource type="Sky" id="5"]
+sky_material = SubResource("4")
+
+[sub_resource type="Environment" id="6"]
+background_mode = 2
+sky = SubResource("5")
+ambient_light_source = 3
+ambient_light_energy = 0.28
+fog_enabled = true
+fog_light_color = Color(0.68, 0.83, 0.78, 1)
+fog_density = 0.004
+fog_aerial_perspective = 0.2
+tonemap_mode = 0
+
+[node name="TestTerrain" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("6")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.72, -0.98, 0.0)
+light_color = Color(1, 0.91, 0.76, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="Terrain" type="VoxelLodTerrain" parent="."]
+view_distance = 256.0
+lod_count = 5
+mesh_block_size = 16
+collision_enabled = true
+generator = SubResource("3")
+mesher = SubResource("2")
+material = SubResource("1")
+
+[node name="Player" parent="." instance=ExtResource("1")]
+position = Vector3(0, 32, 0)

@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Neues Spiel"
-run/main_scene="res://scenes/test_player.tscn"
+config/name="Tir"
+run/main_scene="res://scenes/test_terrain.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
