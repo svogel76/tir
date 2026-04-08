@@ -69,9 +69,23 @@ Shader-Parameter die saisonal umgeschaltet werden.
 
 ## Vegetation
 
-**Bodendeck** *(nächster Schritt)*
-Hohes Wiesengras, Wildblumen (gelb/weiß), moosbewachsene Felsbrocken.
-Siehe Referenzbild (Idyllische_Landschaft_mit_alten_Bäumen.png).
+**Terrain-basiertes Gras** *(hohe Priorität)*
+Der aktuelle MultiMesh-Büschel-Ansatz erreicht nicht den gewünschten
+Ghibli-Dichte-Look. Die richtige Lösung ist Gras direkt im Terrain-Shader –
+kleine Gras-Sprites als dichte Schicht auf der Terrain-Oberfläche,
+wie in Genshin Impact oder Valheim umgesetzt.
+Aktueller Stand: Gras-Büschel als MultiMesh funktionieren technisch,
+sehen aber von der Seite immer wie einzelne Objekte aus.
+Neuer Ansatz: Terrain-Shader bekommt eine Gras-Schicht,
+keine separaten Mesh-Instanzen.
+
+**Blumen Cel-Shading** *(mittel)*
+Aktuelle Blumen-Quads reagieren nicht korrekt auf Licht –
+kein Cel-Shading sichtbar, Farbe unmoduliert.
+flower_cel.gdshader braucht korrekte Licht-Integration
+mit DirectionalLight3D wie terrain_cel.gdshader.
+Außerdem: Blüten-Form noch zu eckig – runder Fächer
+statt Kreuz-Quads wäre überzeugender.
 
 **Windanimation**
 Gras und Baumkronen sollen im Wind bewegen.
