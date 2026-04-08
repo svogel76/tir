@@ -98,11 +98,13 @@ var _landing_velocity: float = 0.0
 var _was_on_floor: bool = false
 var _was_jumping: bool = false
 var _fall_speed_before_landing: float = 0.0
+var _input_enabled: bool = true
 
 
 func _ready() -> void:
 	stamina_current = stamina_max
 	_base_head_position = _head.position
+	add_to_group("player")
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_current_yaw = rotation.y
 	_target_yaw = _current_yaw
@@ -112,6 +114,8 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not _input_enabled:
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -126,6 +130,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not _input_enabled:
+		_update_vertical_velocity(delta)
+		velocity.x = move_toward(velocity.x, 0.0, deceleration * delta)
+		velocity.z = move_toward(velocity.z, 0.0, deceleration * delta)
+		move_and_slide()
+		_update_landing_impact()
+		_update_state(false, Vector2.ZERO)
+		_update_camera(delta, Vector2.ZERO)
+		return
+
 	_update_look(delta)
 	_update_vertical_velocity(delta)
 	var move_input: Vector2 = _get_move_input()
@@ -354,3 +368,10 @@ func _update_landing_impact() -> void:
 		_landing_velocity = 0.0
 
 	_was_on_floor = on_floor_now
+
+
+func set_input_enabled(value: bool) -> void:
+	_input_enabled = value
+	if not _input_enabled:
+		velocity.x = 0.0
+		velocity.z = 0.0
