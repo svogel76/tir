@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://src/systems/day_night_cycle.tscn" id="6"]
 [ext_resource type="Script" uid="uid://fpqoixklmb3h" path="res://src/systems/auto_ambient_player.gd" id="7"]
 [ext_resource type="Script" uid="uid://ct56ia44xaawv" path="res://src/world/tree_placer.gd" id="8"]
+[ext_resource type="Script" uid="uid://h8ldi5girr2k" path="res://src/world/ground_cover_placer.gd" id="9"]
 
 [sub_resource type="ProceduralSkyMaterial" id="4"]
 sky_top_color = Color(0.32, 0.66, 0.72, 1)
@@ -87,6 +88,14 @@ run_stream_in_editor = false
 [node name="TreePlacer" type="Node3D" parent="." unique_id=479818744]
 script = ExtResource("8")
 terrain_path = NodePath("../Terrain")
+
+[node name="GroundCoverPlacer" type="Node3D" parent="." unique_id=479818745]
+script = ExtResource("9")
+terrain_path = NodePath("../Terrain")
+flower_near_grass_chance = 0.86
+standalone_flower_clusters = 45
+flower_max_slope_deg = 18.0
+flower_yellow_weight = 0.55
 
 [node name="Player" parent="." unique_id=1991583728 instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
