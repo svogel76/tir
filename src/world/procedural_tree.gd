@@ -192,11 +192,6 @@ func _trunk_surface(p: Dictionary, bend_dir: Vector3, y: float, ang: float) -> D
 
 func _make_twisted_trunk_mesh(p: Dictionary, bend_dir: Vector3) -> ArrayMesh:
 	var height: float = p["trunk_height"]
-	var bottom_r: float = p["bottom_radius"]
-	var top_r: float = p["top_radius"]
-	var twist_turns: float = p["twist_turns"]
-	var bend: float = p["bend"]
-	var ripples: float = p["bark_ripples"]
 	var rings: int = p["rings"]
 	var segments: int = p["segments"]
 
@@ -284,9 +279,9 @@ func _build_branches(p: Dictionary) -> void:
 		mi.name = "Branch_%d" % i
 		mi.mesh = cyl
 		mi.material_override = _trunk_material
-		var basis := _basis_y_axis(dir)
+		var branch_basis := _basis_y_axis(dir)
 		var pos: Vector3 = surf["position"] + dir * (blen * 0.5)
-		mi.transform = Transform3D(basis, pos)
+		mi.transform = Transform3D(branch_basis, pos)
 		add_child(mi)
 
 
